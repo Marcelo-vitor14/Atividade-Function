@@ -1,0 +1,18 @@
+CREATE OR REPLACE PROCEDURE popularBancoTeste(qtd INT)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    contador INT := 1;
+    salario_atual NUMERIC := 1000;
+BEGIN
+    WHILE contador <= qtd LOOP
+        INSERT INTO funcionarios (nome, salario, cargo_id, excluido)
+        VALUES (CONCAT('Funcionário Teste ', contador), salario_atual, 3, TRUE);
+        
+        contador := contador + 1;
+        salario_atual := salario_atual + 200;
+    END LOOP;
+END;
+$$;
+
+CALL popularBancoTeste(4);

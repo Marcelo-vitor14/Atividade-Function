@@ -1,0 +1,49 @@
+CREATE TABLE cargos (
+	id serial primary key,
+	cargo varchar,
+	aumento numeric(7,2) 
+);
+
+INSERT INTO cargos (cargo, aumento) values ('diretor', 1000), ('coordenador', 500), ('professor', 200);
+
+
+
+CREATE TABLE funcionarios (
+	id serial primary key,
+	nome varchar,
+	salario numeric,
+	cargo_id integer REFERENCES cargos(id),
+	excluido boolean
+);
+
+INSERT INTO funcionarios (nome, salario, cargo_id, excluido) values ('Carlos', 2000, 3, true), ('João', 2500, 3, true), ('Thiago', 4000, 2, false), ('Marcio', 4300, 2, true), ('Diogo', 1200, 2, false), ('Maria', 5000, 1, true), ('Helena', 5000, 1, false);
+
+
+
+
+CREATE OR REPLACE FUNCTION buscaFuncionariosByCargo(cargo_nome VARCHAR(50))
+RETURNS TABLE (
+    id INT,
+    nome VARCHAR,
+    salario NUMERIC,
+    cargo_id INT,
+    excluido BOOLEAN
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        f.id,
+        f.nome,
+        f.salario,
+        f.cargo_id,
+        f.excluido
+    FROM funcionarios f
+    INNER JOIN cargos c ON f.cargo_id = c.id
+    WHERE LOWER(c.cargo) = LOWER(cargo_nome);
+END;
+$$;
+
+
+SELECT * FROM buscaFuncionariosByCargo('diretor');

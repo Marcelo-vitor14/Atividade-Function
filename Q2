@@ -1,0 +1,13 @@
+CREATE OR REPLACE PROCEDURE (funcionario_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE funcionarios f
+    SET salario = f.salario + c.aumento
+    FROM cargos c
+    WHERE f.cargo_id = c.id
+      AND f.id = funcionario_id;
+END;
+$$;
+
+CALL aumentoSalario(2);

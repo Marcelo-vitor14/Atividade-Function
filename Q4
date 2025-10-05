@@ -1,0 +1,16 @@
+CREATE OR REPLACE PROCEDURE aumentoSalario()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE funcionarios
+    SET salario = CASE 
+        WHEN cargo_id = 1 THEN salario * 1.20
+        WHEN cargo_id = 2 THEN salario * 1.15
+        WHEN cargo_id = 3 THEN salario * 1.10
+        ELSE salario
+    END;
+END;
+$$;
+
+
+CALL aumentoSalario();

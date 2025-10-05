@@ -1,0 +1,18 @@
+CREATE OR REPLACE FUNCTION chequeSalario(id_func INTEGER)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    salario_func NUMERIC;
+BEGIN
+    SELECT salario INTO salario_func
+    FROM funcionarios
+    WHERE id = id_func;
+
+    IF salario_func > 3999 THEN
+        RETURN 'E maior que 3999';
+    ELSE
+        RETURN 'E abaixo de 3999';
+    END IF;
+END;
+$$;
